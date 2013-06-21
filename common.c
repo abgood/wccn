@@ -190,7 +190,7 @@ void show_ping(icmp_st *i_stat) {
     recv_num = i_stat->recv_num;
     printf("\n--- ping值状态 ---\n");
     printf("%u 个报文被发送, %u 个报文被接收, %0.0f%% 报文丢失\n", (int)send_num, (int)recv_num, (send_num - recv_num) / send_num * 100);
-    printf("时间: 报文传输最大时间 = %.1fms, 报文传输最短时间 = %.1fms, 报文传输平均时间 = %.2fms\n", i_stat->max_time, i_stat->min_time, i_stat->avg_time);
+    printf("报文传输: 最长时间 = %.1fms, 最短时间 = %.1fms, 平均时间 = %.2fms\n", i_stat->max_time, i_stat->min_time, i_stat->avg_time);
 }
 
 /* parse trace icmp message */
