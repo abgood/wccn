@@ -29,7 +29,7 @@ void chk_ping(char *domain) {
     memcpy((char *)&addr.sin_addr, (char *)(host_name->h_addr), host_name->h_length);
     addr.sin_family = host_name->h_addrtype;
 
-    printf("\nPING %s(%s): %d bytes in ICMP packets\n", domain, inet_ntoa(addr.sin_addr), ICMP_DATA_LEN);
+    out_write("\nPING %s(%s): %d bytes in ICMP packets\n", domain, inet_ntoa(addr.sin_addr), ICMP_DATA_LEN);
 
     while (echo_num < ICMP_ECHO_MAX) {
         memset(send_buff, 0, sizeof(send_buff));

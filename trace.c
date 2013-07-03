@@ -29,7 +29,7 @@ void chk_trace(char *domain) {
     memcpy((char *)&addr.sin_addr, (char *)(host_name->h_addr), host_name->h_length);
     addr.sin_family = host_name->h_addrtype;
 
-    printf("\ntraceroute to %s (%s), %d hops max, %d byte packets\n", domain, inet_ntoa(addr.sin_addr), ICMP_HOP_MAX, ICMP_DATA_LEN);
+    out_write("\ntraceroute to %s (%s), %d hops max, %d byte packets\n", domain, inet_ntoa(addr.sin_addr), ICMP_HOP_MAX, ICMP_DATA_LEN);
 
     while (echo_num <= ICMP_HOP_MAX) {
         memset(send_buff, 0, sizeof(send_buff));

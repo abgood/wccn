@@ -16,9 +16,9 @@ void conn_port(char *domain, int port) {
     memcpy((char *)&addr.sin_addr, (char *)(host_name->h_addr), host_name->h_length);
     addr.sin_family = host_name->h_addrtype;
     if (connect(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-        printf("连接 %s 的 %d 端口失败!!!\n", domain, port);
+        out_write("连接 %s 的 %d 端口失败!!!\n", domain, port);
     } else {
-        printf("连接 %s 的 %d 端口成功!!!\n", domain, port);
+        out_write("连接 %s 的 %d 端口成功!!!\n", domain, port);
     }
 
     close(fd);
@@ -32,29 +32,29 @@ void chk_port(char *domain, char *cdn, port_info port_info, int site_port) {
     from_port = port_info->base_port + (port_info->time_port * site_port);
     to_port = port_info->base_port + (port_info->time_port * site_port) + (port_info->time_port - 1);
 
-    printf("\n");
+    out_write("\n");
 
     /* game port check*/
     for (i = from_port; i <= to_port; i++) {
         conn_port(domain, i);
     }
 
-    printf("\n");
+    out_write("\n");
 
     /* nginx port check */
     conn_port(domain, WEBPORT);
 
-    printf("\n");
+    out_write("\n");
 
     /* flash port check */
     conn_port(domain, FLAPORT);
 
-    printf("\n");
+    out_write("\n");
 
     /* resource port check */
     conn_port(cdn, CDNPORT);
 
-    printf("\n");
+    out_write("\n");
 }
 
 void check_port(char *s_domain, char *res_domain, int res_flag, int site_port, port_info port_info) {

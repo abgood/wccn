@@ -66,7 +66,7 @@ void curl_data(loc_info info) {
     output = last_line;
 #endif
     sscanf(output, "%*[^您]%[^<]", play);
-    printf("\n%s\n\n", play);
+    out_write("\n%s\n\n", play);
     sscanf(output, "%*[^[][%[^]]%*[^：]：%[^ ] %[^<]", ip, address, agent);
 
     strncpy(info->ip, ip, strlen(ip));

@@ -2,9 +2,13 @@
 
 void out_error(char *fmt, ...) {
     va_list argp;
+    FILE *fp = fopen(OUT_FILE, "a");
 
     va_start(argp, fmt);
     vfprintf(stderr, fmt, argp);
+    vfprintf(fp, fmt, argp);
+
+    fclose(fp);
     va_end(argp);
 
 #ifdef WINDOWS
@@ -12,6 +16,18 @@ void out_error(char *fmt, ...) {
     getch();
 #endif
     exit(1);
+}
+
+void out_write(char *fmt, ...) {
+    va_list argp;
+    FILE *fp = fopen(OUT_FILE, "a");
+
+    va_start(argp, fmt);
+    vfprintf(stdout, fmt, argp);
+    vfprintf(fp, fmt, argp);
+
+    fclose(fp);
+    va_end(argp);
 }
 
 /* get local domain resolve ip */
@@ -37,12 +53,12 @@ void chk_resolve(char *domain, char *telecom_ip, char *unicom_ip, char *agent, c
 
     if (strcmp(agent, "电信") == 0) {
         if (strcmp(host_ip, telecom_ip) == 0) {
-            printf("%s 域名解析到 %s ip, 成功!!!\n\n", prefix, agent);
+            out_write("%s 域名解析到 %s ip, 成功!!!\n\n", prefix, agent);
             return;
         }
 
         if (strcmp(host_ip, unicom_ip) == 0) {
-            printf("%s 域名没有解析到 %s ip, 失败!!!\n", prefix, agent);
+            out_write("%s 域名没有解析到 %s ip, 失败!!!\n", prefix, agent);
             goto out_t;
         }
 
@@ -51,12 +67,12 @@ out_t:  out_error("本地正确解析: %s %s\n\n", telecom_ip, domain);
 
     if (strcmp(agent, "联通") == 0) {
         if (strcmp(host_ip, unicom_ip) == 0) {
-            printf("%s 域名解析到 %s ip, 成功!!!\n\n", prefix, agent);
+            out_write("%s 域名解析到 %s ip, 成功!!!\n\n", prefix, agent);
             return;
         }
 
         if (strcmp(host_ip, telecom_ip) == 0) {
-            printf("%s 域名没有解析到 %s ip, 失败!!!\n", prefix, agent);
+            out_write("%s 域名没有解析到 %s ip, 失败!!!\n", prefix, agent);
             goto out_u;
         }
 
@@ -88,9 +104,9 @@ void set_cdn_ip(MYSQL_RES *res, int res_flag) {
 
     mysql_data_seek(res, 0);
 
-    printf("本地正确解析(以下任选其一):\n");
+    out_write("本地正确解析(以下任选其一):\n");
     while ((row = mysql_fetch_row(res))) {
-        printf("\t\t     %s %s\n", row[res_flag], CDN);
+        out_write("\t\t     %s %s\n", row[res_flag], CDN);
     }
 }
 
@@ -102,12 +118,12 @@ void check_cdn(MYSQL_RES *res, char *agent) {
 
     if (strcmp(agent, "电信") == 0) {
         if (check_ip(host_ip, res, 1) == 0) {
-            printf("%s 域名解析到 %s ip, 成功!!!\n\n", CDN_PREFIX, agent);
+            out_write("%s 域名解析到 %s ip, 成功!!!\n\n", CDN_PREFIX, agent);
             return;
         }
 
         if (check_ip(host_ip, res, 2) == 0) {
-            printf("%s 域名没有解析到 %s ip, 失败!!!\n", CDN_PREFIX, agent);
+            out_write("%s 域名没有解析到 %s ip, 失败!!!\n", CDN_PREFIX, agent);
             goto out_t;
         }
 
@@ -117,12 +133,12 @@ out_t:  set_cdn_ip(res, 1);
 
     if (strcmp(agent, "联通") == 0) {
         if (check_ip(host_ip, res, 2) == 0) {
-            printf("%s 域名解析到 %s ip, 成功!!!\n\n", CDN_PREFIX, agent);
+            out_write("%s 域名解析到 %s ip, 成功!!!\n\n", CDN_PREFIX, agent);
             return;
         }
 
         if (check_ip(host_ip, res, 1) == 0) {
-            printf("%s 域名没有解析到 %s ip, 失败!!!\n", CDN_PREFIX, agent);
+            out_write("%s 域名没有解析到 %s ip, 失败!!!\n", CDN_PREFIX, agent);
             goto out_u;
         }
 

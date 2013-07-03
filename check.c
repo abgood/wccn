@@ -21,6 +21,8 @@ int main (int argc, char **argv) {
     MYSQL_RES *cdn_res;
     MYSQL_RES *port_res;
 
+    remove(OUT_FILE);
+
     /* init player_info */
     if (!(player_info = malloc(sizeof(struct local_info)))) {
         out_error("player_info结构动态分配内存失败\n");
@@ -36,7 +38,7 @@ int main (int argc, char **argv) {
         out_error("port_info结构动态分配内存失败\n");
     }
 
-    printf("请输入有问题的游戏区site值: ");
+    out_write("请输入有问题的游戏区site值: ");
     scanf("%s", site);
 
     sscanf(site, "%[^_]%*c%s", site_name, site_id);

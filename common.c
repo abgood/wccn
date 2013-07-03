@@ -93,12 +93,12 @@ int recv_icmp(int fd, char *buff, icmp_st *i_stat, recv_st *r_stat) {
     if (r_stat->recv_len < 0) {
 #ifndef WINDOWS
         if (errno == EAGAIN) {
-            printf("请求超时.\n");
+            out_write("请求超时.\n");
         } else {
-            printf("icmp receive error!!!\n");
+            out_write("icmp receive error!!!\n");
         }
 #else
-        printf("%2d:         *   *    *   *        请求超时.\n",i_stat->send_num);
+        out_write("%2d:         *   *    *   *        请求超时.\n",i_stat->send_num);
 #endif
         return 1;
     }
@@ -152,7 +152,7 @@ void parse_ping(char *buff, recv_st *r_stat, icmp_st *i_stat) {
     icmp_len = r_stat->recv_len - ip_head_len;
 
     if (icmp_len < 8) {
-        printf("Bad icmp echo-reply\n");
+        out_write("Bad icmp echo-reply\n");
         return;
     }
 
@@ -160,7 +160,7 @@ void parse_ping(char *buff, recv_st *r_stat, icmp_st *i_stat) {
         return;
     }
 
-    printf("%d bytes from %s: icmp_seq=%u ttl=%d time=%d ms\n", icmp_len, inet_ntoa(r_stat->from_addr.sin_addr), ntohs(p_icmp->icmp_seq), p_ip->ip_ttl, time_sub(&i_stat->recv_time, &i_stat->send_time));
+    out_write("%d bytes from %s: icmp_seq=%u ttl=%d time=%d ms\n", icmp_len, inet_ntoa(r_stat->from_addr.sin_addr), ntohs(p_icmp->icmp_seq), p_ip->ip_ttl, time_sub(&i_stat->recv_time, &i_stat->send_time));
 }
 
 #ifdef WINDOWS
@@ -188,9 +188,9 @@ void show_ping(icmp_st *i_stat) {
     float send_num, recv_num;
     send_num = i_stat->send_num;
     recv_num = i_stat->recv_num;
-    printf("\n--- ping值状态 ---\n");
-    printf("%u 个报文被发送, %u 个报文被接收, %0.0f%% 报文丢失\n", (int)send_num, (int)recv_num, (send_num - recv_num) / send_num * 100);
-    printf("报文传输: 最长时间 = %.1fms, 最短时间 = %.1fms, 平均时间 = %.2fms\n", i_stat->max_time, i_stat->min_time, i_stat->avg_time);
+    out_write("\n--- ping值状态 ---\n");
+    out_write("%u 个报文被发送, %u 个报文被接收, %0.0f%% 报文丢失\n", (int)send_num, (int)recv_num, (send_num - recv_num) / send_num * 100);
+    out_write("报文传输: 最长时间 = %.1fms, 最短时间 = %.1fms, 平均时间 = %.2fms\n", i_stat->max_time, i_stat->min_time, i_stat->avg_time);
 }
 
 /* parse trace icmp message */
@@ -206,20 +206,20 @@ int parse_trace(char *buff, recv_st *r_stat, icmp_st *i_stat) {
     icmp_len = r_stat->recv_len - ip_head_len;
 
     if (icmp_len < 8) {
-        printf("Bad icmp echo-reply\n");
+        out_write("Bad icmp echo-reply\n");
         return 0;
     }
 
     /* time out icmp message */
     if ((p_icmp->icmp_type == ICMP_TIMEOUT) && (p_icmp->icmp_code == 0)) {
-        printf("%2d:        %-15s       %4dms\n", i_stat->send_num, inet_ntoa(r_stat->from_addr.sin_addr), time_sub(&i_stat->recv_time, &i_stat->send_time));
+        out_write("%2d:        %-15s       %4dms\n", i_stat->send_num, inet_ntoa(r_stat->from_addr.sin_addr), time_sub(&i_stat->recv_time, &i_stat->send_time));
         return 0;
     } else if ((p_icmp->icmp_type == ICMP_ECHOREPLY) || (p_icmp->icmp_id != htons((unsigned short)getpid()))) {
-        printf("%2d:        %-15s       %4dms\n", i_stat->send_num, inet_ntoa(r_stat->from_addr.sin_addr), time_sub(&i_stat->recv_time, &i_stat->send_time));
-        printf("跟踪完成!\n");
+        out_write("%2d:        %-15s       %4dms\n", i_stat->send_num, inet_ntoa(r_stat->from_addr.sin_addr), time_sub(&i_stat->recv_time, &i_stat->send_time));
+        out_write("跟踪完成!\n");
         return 1;
     } else {
-        printf("%2d:        目标主机不可达!\n", i_stat->send_num);
+        out_write("%2d:        目标主机不可达!\n", i_stat->send_num);
         return 1;
     }
     return 0;
