@@ -22,8 +22,8 @@ OBJS = $(patsubst %.c,%.o,$(SOURCES))
 
 # 生成执行文件
 $(TARGET):$(OBJS)
-	$(CC) $(OBJS) -o $(TARGET) $(LIBMYSQL) $(LIBCURL) $(LIBICONV) $(LIBSSL)
-	chmod u+x $(TARGET)
+	$(CC) $(OBJS) -o $@ $(LIBMYSQL) $(LIBCURL) $(LIBICONV) $(LIBSSL)
+	chmod u+x $@
 
 # 删除.o文件和执行文件
 clean:

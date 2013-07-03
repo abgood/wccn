@@ -29,6 +29,7 @@
 
 /* some file */
 #define TMP_FILE "tmp"
+#define OUT_FILE "outfile"
 
 /* 分割符 */
 #define D_SITE_NAME "="
