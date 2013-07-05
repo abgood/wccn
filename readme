@@ -3,3 +3,37 @@
     2. 检测ping
     3. 检测路由
     4. 检测端口
+
+
+工具简介
+神曲玩家本地环境检测 (可用于其它网页游戏,但需要修改数据库里的内容)
+
+此工具是在linux下开发，然后移植到windows下
+
+linux:
+    开发环境:
+        gcc (GCC) 4.1.2 20080704 (Red Hat 4.1.2-54)
+        VIM - Vi IMproved 7.3 (2010 Aug 15, compiled May 30 2013 14:12:03)
+        GNU gdb (GDB) CentOS (7.0.1-45.el5.centos)
+        mysql  Ver 14.14 Distrib 5.6.10, for Linux (i686) using  EditLine wrapper
+        curl 7.15.5 (i386-redhat-linux-gnu) libcurl/7.15.5 OpenSSL/0.9.8b zlib/1.2.3 libidn/0.6.5
+        iconv (GNU libiconv 1.14)
+
+
+windows:
+    开发环境:
+        DEV C++ Version 4.9.9.2
+        libmysql (5.0.5)
+        libcurl (7.14.0)
+        libiconv (1.9.1)
+        openssl (0.9.8)
+        zlib (1.2.3)
+        编译选项: -lmysql -lws2_32 -g3 -lcurldll -liconv -liphlpapi -lcrypto -lssh
+
+数据库:
+    sql语句: check.sql
+
+linux移植到windows下时所操作项    
+    1. 修改define.h里的WINDOWS (启用windows支持)
+    2. 文件编码转换 (unix 转换为 dos格式)
+        unix2dos * && for i in `ls`; do iconv -f utf-8 -t gb2312 $i > a && cat a > $i; done
