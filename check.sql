@@ -11,7 +11,7 @@ create table indepe_info (
 /* 共同信息 */
 create table common_info (
     `Id` int(20) NOT NULL AUTO_INCREMENT primary key COMMENT '编号',
-    site_name varchar(15) not null default '',
+    site_name text,
     domain text
     -- bind boolean not null default 0         -- 0是为绑定域名,1是绑定域名
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
