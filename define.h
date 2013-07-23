@@ -29,7 +29,11 @@
 
 /* some file */
 #define TMP_FILE "tmp"
+#ifndef WINDOWS
 #define OUT_FILE "outfile"
+#else
+#define OUT_FILE "outfile.txt"
+#endif
 
 /* 分割符 */
 #define D_SITE_NAME "="
