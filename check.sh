@@ -80,7 +80,7 @@ do
         echo $unicom_ip
         echo $port
         echo $resoure
-        echo "insert into web_check.indepe_info(site,telecom_ip,unicom_ip,port,resoure) values('$string', '$telecom_ip', '$unicom_ip', '$port', '$resoure');" | mysql -h192.168.56.101 -P3306 -uroot -p123456
+        echo "call sq.check_insert('$string', '$telecom_ip', '$unicom_ip', '$port', '$resoure')" | mysql -h192.168.56.101 -P3306 -uroot -p123456
 
     fi
 done

@@ -29,3 +29,18 @@ create table port_info (
     base_port integer not null default 0,
     time_port integer not null default 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+/* 插入各区数据存储过程 */
+delimiter //
+drop procedure if exists check_insert//
+create procedure check_insert(
+    in i_site text,
+    in i_telecom_ip varchar(20),
+    in i_unicom_ip varchar(20),
+    in i_port integer,
+    in i_resoure integer
+)
+begin
+    insert into sq.indepe_info(site, telecom_ip, unicom_ip, port, resoure) values(i_site, i_telecom_ip, i_unicom_ip, i_port, i_resoure);
+end//
+delimiter ;
