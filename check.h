@@ -8,6 +8,7 @@
 #include <iconv.h>
 #include <stdarg.h>
 #include <ctype.h>
+#include <setjmp.h>
 
 #include <curl/curl.h>
 #include <curl/types.h>
@@ -25,6 +26,7 @@
 #include "trace.h"
 #include "common.h"
 #include "port.h"
+#include "del.h"
 
 #ifndef WINDOWS
 #include <netdb.h>
@@ -36,7 +38,11 @@
 #else
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <shellapi.h>
+#include <shlobj.h>
 #endif
+
+extern jmp_buf jmpbuffer;
 
 typedef struct recv_stat {
     int recv_len;

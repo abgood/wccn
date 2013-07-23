@@ -11,11 +11,9 @@ void out_error(char *fmt, ...) {
     fclose(fp);
     va_end(argp);
 
-#ifdef WINDOWS
-    printf("\n请按任意键退出...");
-    getch();
-#endif
-    exit(1);
+    /* 跳转到跳转点处 */
+    printf("\n\n");
+    longjmp(jmpbuffer, 1);
 }
 
 void out_write(char *fmt, ...) {

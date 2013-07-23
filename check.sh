@@ -52,7 +52,7 @@ do
         fi
 
         # mysql里site字段生成
-        site="$master$second"
+        string="$master$second"
 
         # mysql里ip字段生成
         telecom_ip=`ifconfig eth0 | grep "inet addr" | awk -F":" '{print $2}' | awk '{print $1}'`
@@ -72,12 +72,15 @@ do
             resoure=1
         fi
 
+        rm $log -rf
+
         # 插入mysql
-        echo $site
+        echo $string
         echo $telecom_ip
         echo $unicom_ip
         echo $port
         echo $resoure
+        echo "insert into web_check.indepe_info(site,telecom_ip,unicom_ip,port,resoure) values('$string', '$telecom_ip', '$unicom_ip', '$port', '$resoure');" | mysql -h192.168.56.101 -P3306 -uroot -p123456
 
     fi
 done

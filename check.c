@@ -1,5 +1,8 @@
 #include "check.h"
 
+/* 全局跳转点 */
+jmp_buf jmpbuffer;
+
 int main (int argc, char **argv) {
     loc_info player_info;
     site_info site_info;
@@ -37,6 +40,9 @@ int main (int argc, char **argv) {
     if (!(port_info = malloc(sizeof(struct port_list)))) {
         out_error("port_info结构动态分配内存失败\n");
     }
+
+    /* 设置跳转点 */
+    setjmp(jmpbuffer);
 
     out_write("请输入有问题的游戏区site值: ");
     scanf("%s", site);
@@ -98,8 +104,7 @@ int main (int argc, char **argv) {
 
     /* win program at the end of the return */
 #ifdef WINDOWS
-    printf("请按任意键退出...");
-    getch();
+    del_file();
 #endif
     return 0;
 }
