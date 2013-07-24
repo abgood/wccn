@@ -57,6 +57,14 @@ do
         # mysql里ip字段生成
         telecom_ip=`ifconfig eth0 | grep "inet addr" | awk -F":" '{print $2}' | awk '{print $1}'`
         unicom_ip=`ifconfig eth0:1 | grep "inet addr" | awk -F":" '{print $2}' | awk '{print $1}'`
+        if [ -z "$unicom_ip" ]; then
+            unicom_ip=`ifconfig eth0:0 | grep "inet addr" | awk -F":" '{print $2}' | awk '{print $1}'`
+        fi
+        #all_ip=`ifconfig|grep -oP '(?<=inet addr:)(\d+.){3}\d+'|head -n2|xargs`
+        #eth_file=`grep IPADDR /etc/sysconfig/network-scripts/ifcfg-eth0*`
+        #telecom_ip=`echo "$eth_file" | grep "eth0:I" | awk -F"=" '{print $2}'`
+        #unicom_ip=`echo "$eth_file" | grep "eth0:[01]:" | awk -F"=" '{print $2}'`
+        #ifconfig|grep -oP '(?<=inet addr:)(\d+.){3}\d+'|sed '/^192./d;/^10./d;/^127./d'
 
         # mysql里port字段生成
         port=`echo $m | grep -P -o "\d+"`
@@ -81,6 +89,7 @@ do
         echo $port
         echo $resoure
         echo "call sq.check_insert('$string', '$telecom_ip', '$unicom_ip', '$port', '$resoure')" | mysql -h192.168.56.101 -P3306 -uroot -p123456
+        echo "${master_site} insert data success"
 
     fi
 done
