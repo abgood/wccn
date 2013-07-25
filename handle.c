@@ -110,29 +110,32 @@ void handle_indepe(site_info output, char *input_name, int input_id, MYSQL_RES *
                 output->port = atoi(row[4]);
                 output->resource = atoi(row[5]);
                 output->site_id = atoi(m_id);
+                return;
             }
-            continue;
         } else {
+            memset(id_start_tmp, '\0', LEN_64);
             strncpy(id_start_tmp, id_start, strlen(id_start));
             token = strtok(id_start_tmp, D_ID_FIELD);
             while (token) {
+                memset(id_token_start, '\0', LEN_16);
+                memset(id_token_end, '\0', LEN_16);
                 sscanf(token, "%[^~]~%[^;];", id_token_start, id_token_end);
 
                 int_id_start = atoi(id_token_start);
                 int_id_end = atoi(id_token_end);
 
                 /* get ip */
-                if (input_id >= int_id_start && input_id <= int_id_end) {
+                if ((input_id >= int_id_start && input_id <= int_id_end) || (input_id == int_id_start)) {
                     output->telecom_ip = row[2];
                     output->unicom_ip = row[3];
                     output->port = atoi(row[4]);
                     output->resource = atoi(row[5]);
                     output->site_id = atoi(m_id);
+                    return;
                 }
 
                 token = strtok(NULL, D_ID_FIELD);
             }
-            continue;
         }
     }
 }

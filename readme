@@ -37,3 +37,7 @@ linux移植到windows下时所操作项
     1. 修改define.h里的WINDOWS (启用windows支持)
     2. 文件编码转换 (unix 转换为 dos格式)
         unix2dos * && for i in `ls`; do iconv -f utf-8 -t gb2312 $i > a && cat a > $i; done
+
+
+解决: site字段里没有"~"的多个域
+    有一个问题:linux下运行段异常,windows下运行正常
