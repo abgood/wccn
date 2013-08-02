@@ -49,7 +49,7 @@ void chk_resolve(char *domain, char *telecom_ip, char *unicom_ip, char *agent, c
 
     host_ip = local_domain_to_ip(prefix, domain);
 
-    if (strcmp(agent, "电信") == 0) {
+    if (strstr(agent, "电信")) {
         if (strcmp(host_ip, telecom_ip) == 0) {
             out_write("%s 域名解析到 %s ip, 成功!!!\n\n", prefix, agent);
             return;
@@ -63,7 +63,7 @@ void chk_resolve(char *domain, char *telecom_ip, char *unicom_ip, char *agent, c
 out_t:  out_error("本地正确解析: %s %s\n\n", telecom_ip, domain);
     }
 
-    if (strcmp(agent, "联通") == 0) {
+    if (strstr(agent, "联通")) {
         if (strcmp(host_ip, unicom_ip) == 0) {
             out_write("%s 域名解析到 %s ip, 成功!!!\n\n", prefix, agent);
             return;
@@ -75,6 +75,11 @@ out_t:  out_error("本地正确解析: %s %s\n\n", telecom_ip, domain);
         }
 
 out_u:  out_error("本地正确解析: %s %s\n\n", unicom_ip, domain);
+    }
+
+    if (!strstr(agent, "电信") && !strstr(agent, "联通")) {
+        out_write("您本地的网络既不是电信也不是联通,而是 %s \n", agent);
+        return;
     }
 }
 
