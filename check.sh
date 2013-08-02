@@ -74,7 +74,7 @@ do
 
         # mysql里resoure字段生成
         line=`grep cdn ${m}/webapp/client/config.xml | wc -l`
-        if [ line == 0 ]; then
+        if [ $line == 0 ]; then
             resoure=0
         else
             resoure=1
