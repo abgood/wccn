@@ -11,6 +11,11 @@ void out_error(char *fmt, ...) {
     fclose(fp);
     va_end(argp);
 
+#ifdef WINDOWS
+    printf("请拷贝上面的正确内容保存并按任意键继续 ...");
+    getch();
+#endif
+
     /* 跳转到跳转点处 */
     printf("\n\n");
     longjmp(jmpbuffer, 1);
