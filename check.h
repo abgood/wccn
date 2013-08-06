@@ -43,6 +43,7 @@
 #endif
 
 extern jmp_buf jmpbuffer;
+extern int show;
 
 typedef struct recv_stat {
     int recv_len;

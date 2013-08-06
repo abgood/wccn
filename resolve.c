@@ -12,8 +12,10 @@ void out_error(char *fmt, ...) {
     va_end(argp);
 
 #ifdef WINDOWS
-    printf("请拷贝上面的正确内容保存并按任意键继续 ...");
-    getch();
+    if (show == 1) {
+        printf("请拷贝上面的正确内容保存并按任意键继续 ...");
+        getch();
+    }
 #endif
 
     /* 跳转到跳转点处 */
@@ -65,7 +67,8 @@ void chk_resolve(char *domain, char *telecom_ip, char *unicom_ip, char *agent, c
             goto out_t;
         }
 
-out_t:  out_error("本地正确解析: %s %s\n\n", telecom_ip, domain);
+out_t:  show = 1;
+        out_error("本地正确解析: %s %s\n\n", telecom_ip, domain);
     }
 
     if (strstr(agent, "联通")) {
@@ -79,7 +82,8 @@ out_t:  out_error("本地正确解析: %s %s\n\n", telecom_ip, domain);
             goto out_u;
         }
 
-out_u:  out_error("本地正确解析: %s %s\n\n", unicom_ip, domain);
+out_u:  show = 1;
+        out_error("本地正确解析: %s %s\n\n", unicom_ip, domain);
     }
 
     if (!strstr(agent, "电信") && !strstr(agent, "联通")) {

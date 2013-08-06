@@ -1,5 +1,7 @@
 #include "check.h"
 
+int show;
+
 /* 全局跳转点 */
 jmp_buf jmpbuffer;
 
@@ -43,6 +45,7 @@ int main (int argc, char **argv) {
 
     /* 设置跳转点 */
     setjmp(jmpbuffer);
+    show = 0;
 
     out_write("请输入有问题的游戏区site值: ");
     scanf("%s", site);
