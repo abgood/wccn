@@ -120,6 +120,10 @@ void set_cdn_ip(MYSQL_RES *res, int res_flag) {
     while ((row = mysql_fetch_row(res))) {
         out_write("\t\t     %s %s\n", row[res_flag], CDN);
     }
+
+    show = 1;
+
+    out_error("\n");
 }
 
 /* cdn domain resolve */
@@ -140,7 +144,6 @@ void check_cdn(MYSQL_RES *res, char *agent) {
         }
 
 out_t:  set_cdn_ip(res, 1);
-        out_error("","");
     }
 
     if (strcmp(agent, "联通") == 0) {
@@ -155,7 +158,6 @@ out_t:  set_cdn_ip(res, 1);
         }
 
 out_u:  set_cdn_ip(res, 2);
-        out_error("","");
     }
 }
 
@@ -172,14 +174,16 @@ void check_resolve(site_info info, loc_info player, MYSQL_RES *cdn_res) {
     /* s域名解析检查 */
     chk_resolve(s_domain, info->telecom_ip, info->unicom_ip, player->agent, S_PREFIX);
 
-    /* res域名解析检查 */
-    chk_resolve(res_domain, info->telecom_ip, info->unicom_ip, player->agent, RES_PREFIX);
-
-    /* res域名解析检查 */
+    /* ass域名解析检查 */
     chk_resolve(ass_domain, info->telecom_ip, info->unicom_ip, player->agent, ASS_PREFIX);
 
     /* cdn域名解析检查 */
     if (info->resource) {
         check_cdn(cdn_res, player->agent);
+    } else {
+        /* res域名解析检查 */
+        chk_resolve(res_domain, info->telecom_ip, info->unicom_ip, player->agent, RES_PREFIX);
     }
+
+    show = 0;
 }
