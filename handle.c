@@ -3,8 +3,8 @@
 /* handle common_info */
 void handle_common(site_info output, char *input_name, int input_id, MYSQL_RES *res) {
     MYSQL_ROW row;
-    char site[LEN_32] = {0};
-    char domain[LEN_256] = {0};
+    char site[LEN_512] = {0};
+    char domain[LEN_1024] = {0};
     char *token;
     char *d_token;
     int num = 1;
@@ -55,12 +55,12 @@ void handle_common(site_info output, char *input_name, int input_id, MYSQL_RES *
 /* handle indepe_info */
 void handle_indepe(site_info output, char *input_name, int input_id, MYSQL_RES *res) {
     MYSQL_ROW row;
-    char agent[LEN_128] = {0};
-    char m_name[LEN_16] = {0};
-    char m_id[LEN_8] = {0};
-    char id_token_start[LEN_16] = {0};
-    char id_token_end[LEN_16] = {0};
-    char id_start_tmp[LEN_64] = {0};
+    char agent[LEN_1024] = {0};
+    char m_name[LEN_64] = {0};
+    char m_id[LEN_32] = {0};
+    char id_token_start[LEN_512] = {0};
+    char id_token_end[LEN_512] = {0};
+    char id_start_tmp[LEN_512] = {0};
     char *s_n_end;
     char *s_i_end;
     char *i_n_start;

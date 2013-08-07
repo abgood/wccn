@@ -57,7 +57,7 @@ int main (int argc, char **argv) {
     remove(TMP_FILE);
 
     /* query indepe table */
-    sprintf(indepe_sql, "select * from %s where site like \'%%%s=%%\' or site like \'%%;%s=%%\'", INDEPE, site_name, site_name);
+    sprintf(indepe_sql, "select * from %s where site like \'%s=%%\' or site like \'%%;%s=%%\'", INDEPE, site_name, site_name);
     indepe_res = quiry(indepe_sql);
     if ((lines = mysql_num_rows(indepe_res)) == (my_ulonglong)0) {
         out_error("无法找到 %s 在 %s 里!!!\n", site, INDEPE);
