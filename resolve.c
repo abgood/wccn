@@ -41,7 +41,7 @@ char *local_domain_to_ip(char *prefix, char *domain) {
     char *host_ip;
 
     if ((host_name = gethostbyname(domain)) == NULL) {
-        out_error("%s gethostbyname 失败!!!\n", prefix);
+        out_error("%s gethostbyname失败,本地DNS失败!!!\n", prefix);
     }
 
     /* player local resolve ip */

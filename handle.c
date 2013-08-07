@@ -24,7 +24,7 @@ void handle_common(site_info output, char *input_name, int input_id, MYSQL_RES *
         /* one site_name */
         if (!strstr(site, D_ID_FIELD)) {
             strncpy(output->domain, row[2], strlen(row[2]));
-        } else {        /* many site_name */
+        } else if (strstr(site, input_name)){        /* many site_name */
             /* site_name */
             token = strtok(site, D_ID_FIELD);
             while (token) {
@@ -48,6 +48,11 @@ void handle_common(site_info output, char *input_name, int input_id, MYSQL_RES *
 
             /* set site_id */
             output->site_id = input_id;
+        } else {
+            d_token = strtok(domain, D_ID_FIELD);
+            if (d_token) {
+                strncpy(output->domain, d_token, strlen(d_token));
+            }
         }
     }
 }
