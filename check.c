@@ -70,7 +70,7 @@ int main (int argc, char **argv) {
     }
 
     /* query common table */
-    sprintf(common_sql, "select * from %s where site_name like \'%%%s%%\' or site_name like \'%%%s%%\'", COMMON, site_info->site_name, site_name);
+    sprintf(common_sql, "select * from %s where site_name=\'%s\' or site_name=\'%s\'", COMMON, site_info->site_name, site_name);
     common_res = quiry(common_sql);
     if ((lines = mysql_num_rows(common_res)) == (my_ulonglong)0) {
         out_error("无法找到 %s 在 %s 里!!!\n", site, COMMON);

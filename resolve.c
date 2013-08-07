@@ -36,12 +36,22 @@ void out_write(char *fmt, ...) {
 }
 
 /* get local domain resolve ip */
-char *local_domain_to_ip(char *prefix, char *domain) {
+char *local_domain_to_ip(char *prefix, char *domain, char *agent, char *telecom_ip, char *unicom_ip) {
     struct hostent *host_name;
     char *host_ip;
 
     if ((host_name = gethostbyname(domain)) == NULL) {
-        out_error("%s gethostbyname失败,本地DNS失败!!!\n", prefix);
+        out_write("%s gethostbyname失败,本地DNS失败!!!\n", prefix);
+        if (strstr(agent, "电信")) {
+            show = 1;
+            out_error("本地正确解析: %s %s\n\n", telecom_ip, domain);
+        } else if (strstr(agent, "联通")) {
+            show = 1;
+            out_error("本地正确解析: %s %s\n\n", unicom_ip, domain);
+        } else {
+            show = 1;
+            out_error("本地正确解析: %s %s\n\n", unicom_ip, domain);
+        }
     }
 
     /* player local resolve ip */
@@ -54,7 +64,7 @@ char *local_domain_to_ip(char *prefix, char *domain) {
 void chk_resolve(char *domain, char *telecom_ip, char *unicom_ip, char *agent, char *prefix) {
     char *host_ip;
 
-    host_ip = local_domain_to_ip(prefix, domain);
+    host_ip = local_domain_to_ip(prefix, domain, agent, telecom_ip, unicom_ip);
 
     if (strstr(agent, "电信")) {
         if (strcmp(host_ip, telecom_ip) == 0) {
@@ -130,7 +140,7 @@ void set_cdn_ip(MYSQL_RES *res, int res_flag) {
 void check_cdn(MYSQL_RES *res, char *agent) {
     char *host_ip;
 
-    host_ip = local_domain_to_ip(CDN_PREFIX, CDN);
+    host_ip = local_domain_to_ip(CDN_PREFIX, CDN, agent, CDN_TC_IP, CDN_UN_IP);
 
     if (strcmp(agent, "电信") == 0) {
         if (check_ip(host_ip, res, 1) == 0) {

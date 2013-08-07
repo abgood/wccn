@@ -3,57 +3,32 @@
 /* handle common_info */
 void handle_common(site_info output, char *input_name, int input_id, MYSQL_RES *res) {
     MYSQL_ROW row;
-    char site[LEN_512] = {0};
-    char domain[LEN_1024] = {0};
-    char *token;
-    char *d_token;
-    int num = 1;
-    int d_num = 1;
+    int lines = 0;
 
     /* site_info 动态分配domain内存 */
     output->domain = (char *)malloc(LEN_64 * sizeof(char));
+    /* 取得结果集行数 */
+    lines = (int)mysql_num_rows(res);
 
-    while ((row = mysql_fetch_row(res))) {
-        memset(site, '\0', LEN_32);
-        memset(domain, '\0', LEN_256);
-        memset(output->domain, '\0', LEN_64);
-
-        strncpy(site, row[1], strlen(row[1]));
-        strncpy(domain, row[2], strlen(row[2]));
-
-        /* one site_name */
-        if (!strstr(site, D_ID_FIELD)) {
-            strncpy(output->domain, row[2], strlen(row[2]));
-        } else if (strstr(site, input_name)){        /* many site_name */
-            /* site_name */
-            token = strtok(site, D_ID_FIELD);
-            while (token) {
-                if (strcmp(token, input_name) == 0) {
-                    break;
-                }
-                num++;
-                token = strtok(NULL, D_ID_FIELD);
-            }
-
-            /* domain */
-            d_token = strtok(domain, D_ID_FIELD);
-            while (d_token) {
-                if (num == d_num) {
-                    strncpy(output->domain, d_token, strlen(d_token));
-                }
-
-                d_num++;
-                d_token = strtok(NULL, D_ID_FIELD);
-            }
-
-            /* set site_id */
-            output->site_id = input_id;
-        } else {
-            d_token = strtok(domain, D_ID_FIELD);
-            if (d_token) {
-                strncpy(output->domain, d_token, strlen(d_token));
+    /* 一行结果集表明从区不需要解析,用的是主区的域名解析 */
+    if (lines == 1) {
+        while ((row = mysql_fetch_row(res))) {
+            memset(output->domain, '\0', LEN_64);
+            if (!strcmp(output->site_name, row[1])) {
+                strncpy(output->domain, row[2], strlen(row[2]));
             }
         }
+    } else if (lines == 2) {    /* 两行结果集表明代理各自解析 */
+        while ((row = mysql_fetch_row(res))) {
+            memset(output->domain, '\0', LEN_64);
+            if (!strcmp(input_name, row[1])) {
+                strncpy(output->domain, row[2], strlen(row[2]));
+                output->site_id = input_id;
+                return;
+            }
+        }
+    } else {
+        printf("handle_common no results\n");
     }
 }
 
@@ -80,8 +55,9 @@ void handle_indepe(site_info output, char *input_name, int input_id, MYSQL_RES *
 
     while ((row = mysql_fetch_row(res))) {
         memset(output->site_name, '\0', LEN_16);
-        memset(agent, '\0', LEN_128);
-        memset(m_id, '\0', LEN_8);
+        memset(agent, '\0', LEN_1024);
+        memset(m_id, '\0', LEN_32);
+        memset(m_name, '\0', LEN_64);
         strncpy(agent, row[1], strlen(row[1]));
         
         /* get master site_name */
@@ -118,12 +94,12 @@ void handle_indepe(site_info output, char *input_name, int input_id, MYSQL_RES *
                 return;
             }
         } else {
-            memset(id_start_tmp, '\0', LEN_64);
+            memset(id_start_tmp, '\0', LEN_512);
             strncpy(id_start_tmp, id_start, strlen(id_start));
             token = strtok(id_start_tmp, D_ID_FIELD);
             while (token) {
-                memset(id_token_start, '\0', LEN_16);
-                memset(id_token_end, '\0', LEN_16);
+                memset(id_token_start, '\0', LEN_512);
+                memset(id_token_end, '\0', LEN_512);
                 sscanf(token, "%[^~]~%[^;];", id_token_start, id_token_end);
 
                 int_id_start = atoi(id_token_start);

@@ -52,6 +52,9 @@
 
 /* cdn domain */
 #define CDN "cdn.shenqu.7road.net"
+/* cdn ip */
+#define CDN_TC_IP "119.147.250.213"
+#define CDN_UN_IP "112.90.129.213"
 
 /* ICMP protocol set */
 #define ICMP_REQUEST_TIMEOUT 2
